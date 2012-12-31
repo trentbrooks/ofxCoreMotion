@@ -2,7 +2,9 @@
 ## ofxCoreMotion ##
 Openframeworks/ios addon (tested with OF 0073, Xcode 4.3.1, ios 5.1) for the Core Motion Framework- http://developer.apple.com/library/ios/#documentation/CoreMotion/Reference/CoreMotion_Reference/_index.html
 
-Example displays the values for attitude (quaternion & roll/pitch/yaw euler angles), gyroscope, accelerometer, & magentometer.
+Example displays the values for attitude (quaternion & roll/pitch/yaw euler angles), gyroscope, accelerometer, & magentometer. The cube moves based on the attitude quaternion.
+
+Can be used in replacement of ofxAccelerometer (which uses the deprecated UIAccelerometer).
 
 ## Dependencies ##
 Add the 'CoreMotion.framework' to your OF xcode project.
