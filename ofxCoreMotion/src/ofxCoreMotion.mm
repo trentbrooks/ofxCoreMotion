@@ -7,6 +7,7 @@ ofxCoreMotion::ofxCoreMotion() {
     // setup objc style delegate
     //coreMotionDelegate = [[ofxCoreMotionDelegate alloc] init:this ];
     motionManager = [[CMMotionManager alloc] init];
+    referenceAttitude = nil;
     updateFrequency = 1.0f/60.0f;
     roll = pitch = yaw = 0;
     enableAttitude = false;
@@ -47,12 +48,15 @@ void ofxCoreMotion::setupAttitude() {
     
     enableAttitude = true;
     //[coreMotionDelegate setupDeviceMotion];
-    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+    
+    // by default let's not use a reference frame so orients to default
+    /*CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
 	CMAttitude *attitude = deviceMotion.attitude;
-    referenceAttitude = [attitude retain];
+    referenceAttitude = [attitude retain];*/
     
     [motionManager setDeviceMotionUpdateInterval: updateFrequency];
     [motionManager startDeviceMotionUpdates];
+    //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
 
 }
 

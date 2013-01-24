@@ -106,6 +106,7 @@ void testApp::touchUp(ofTouchEventArgs & touch){
 //--------------------------------------------------------------
 void testApp::touchDoubleTap(ofTouchEventArgs & touch){
 
+    // resets attitude to current
     coreMotion.resetAttitude();
 }
 
