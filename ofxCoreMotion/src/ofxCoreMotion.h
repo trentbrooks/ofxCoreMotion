@@ -50,8 +50,8 @@ public:
     float getPitch();
     float getYaw();
     ofQuaternion getQuaternion();
-    //ofMatrix4x4 getRotationMatrix();
-    GLfloat* getRotationMatrix();
+    ofMatrix4x4 getRotationMatrix();
+    //GLfloat* getRotationMatrix();
     
 protected:
 
@@ -60,8 +60,8 @@ protected:
     ofVec3f magnetometerData;
     float roll, pitch, yaw;
     ofQuaternion attitudeQuat;
-    //ofMatrix4x4 rotMatrix;
-    GLfloat	rotMatrix[16];
+    ofMatrix4x4 rotMatrix;
+    //GLfloat	rotMatrix[16];
 
 };
 

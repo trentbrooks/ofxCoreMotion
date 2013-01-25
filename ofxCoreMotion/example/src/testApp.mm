@@ -68,16 +68,15 @@ void testApp::draw(){
     ofDrawBitmapString(ofToString(m.y,3), 120, 250);
     ofDrawBitmapString(ofToString(m.z,3), 220, 250);
     
-    // draw a cube and rotate with quaternion
-    ofVec3f axis;  
-    float angle;  
-    quat.getRotate(angle, axis);  
     
     ofNoFill();
-    ofPushMatrix();  
-    ofTranslate(ofGetWidth()/2, ofGetHeight()/2);  
-    ofRotate(angle, axis.x, axis.y, axis.z);  
-	ofBox(0, 0, 220);
+    
+    ofPushMatrix();
+    ofTranslate(ofGetWidth()/2, ofGetHeight()/2, 0);
+    ofRotateX( ofRadToDeg( coreMotion.getPitch() ) );
+    ofRotateY( -ofRadToDeg( coreMotion.getRoll() ) );
+    ofRotateZ( ofRadToDeg( coreMotion.getYaw() ) );
+	ofBox(0, 0, 0, 220);
     ofDrawAxis(100);
     ofPopMatrix();
     ofFill();
