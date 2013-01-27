@@ -116,6 +116,9 @@ void ofxCoreMotion::update() {
         rotMatrix[4] = rot.m12; rotMatrix[5] = rot.m22; rotMatrix[6] = rot.m32;  rotMatrix[7] = 0;
         rotMatrix[8] = rot.m13; rotMatrix[9] = rot.m23; rotMatrix[10] = rot.m33; rotMatrix[11] = 0;
         rotMatrix[12] = 0;      rotMatrix[13] = 0;      rotMatrix[14] = 0;       rotMatrix[15] = 1;*/
+        
+        //cout << rot.m13 << ", " << rot.m23 << ", " << rot.m33 << endl;
+        //cout << quat.x << ", " << quat.x3 << ", " << rot.m33 << endl;
     }
     
     if(enableAccelerometer) {

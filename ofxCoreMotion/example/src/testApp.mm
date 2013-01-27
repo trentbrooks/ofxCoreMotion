@@ -70,16 +70,33 @@ void testApp::draw(){
     
     
     ofNoFill();
+        
+    glPushMatrix();
+    glTranslatef(ofGetWidth()/2, ofGetHeight()/2, 0);
     
-    ofPushMatrix();
-    ofTranslate(ofGetWidth()/2, ofGetHeight()/2, 0);
-    ofRotateX( ofRadToDeg( coreMotion.getPitch() ) );
-    ofRotateY( -ofRadToDeg( coreMotion.getRoll() ) );
-    ofRotateZ( ofRadToDeg( coreMotion.getYaw() ) );
+    // 1) quaternion rotations
+    float angle;
+    ofVec3f axis;//(0,0,1.0f);    
+    quat.getRotate(angle, axis);
+    glRotatef(angle, axis.x, -axis.y, axis.z); // rotate with quaternion
+    
+    // 2) rotate by multiplying matrix directly
+    //ofMatrix4x4 mat = coreMotion.getRotationMatrix();
+    //mat.rotate(180, 0, -1.0f, 0);
+    //glMultMatrixf(mat.getPtr()); 
+    
+    // 3) rotate with eulers
+    //ofRotateX( ofRadToDeg( coreMotion.getPitch() ) ); 
+    //ofRotateY( -ofRadToDeg( coreMotion.getRoll() ) );
+    //ofRotateZ( ofRadToDeg( coreMotion.getYaw() ) );
+    
 	ofBox(0, 0, 0, 220);
     ofDrawAxis(100);
-    ofPopMatrix();
+    glPopMatrix();
+    
     ofFill();
+    ofDrawBitmapString(ofToString("Touch to reset attitude ref frame"), 20, ofGetHeight() - 30);
+    
 }
 
 //--------------------------------------------------------------
