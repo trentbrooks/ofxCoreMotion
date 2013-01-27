@@ -95,7 +95,7 @@ void testApp::draw(){
     glPopMatrix();
     
     ofFill();
-    ofDrawBitmapString(ofToString("Touch to reset attitude ref frame"), 20, ofGetHeight() - 30);
+    ofDrawBitmapString(ofToString("Double tap to reset \nAttitude reference frame"), 20, ofGetHeight() - 50);
     
 }
 
