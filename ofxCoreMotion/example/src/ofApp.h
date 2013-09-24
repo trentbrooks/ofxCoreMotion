@@ -1,11 +1,11 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxiPhone.h"
-#include "ofxiPhoneExtras.h"
+#include "ofxiOS.h"
+#include "ofxiOSExtras.h"
 #include "ofxCoreMotion.h"
 
-class testApp : public ofxiPhoneApp{
+class ofApp : public ofxiOSApp {
 	
     public:
         void setup();
@@ -23,9 +23,8 @@ class testApp : public ofxiPhoneApp{
         void gotFocus();
         void gotMemoryWarning();
         void deviceOrientationChanged(int newOrientation);
-    
-        ofxCoreMotion coreMotion;
 
+    ofxCoreMotion coreMotion;
 };
 
 

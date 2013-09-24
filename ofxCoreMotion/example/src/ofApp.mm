@@ -1,32 +1,27 @@
-#include "testApp.h"
+#include "ofApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){	
-	// initialize the accelerometer
-	//ofxAccelerometer.setup();
-	
-	//If you want a landscape oreintation 
-	//iPhoneSetOrientation(OFXIPHONE_ORIENTATION_LANDSCAPE_RIGHT);
-	
-	ofBackground(127,127,127);
+void ofApp::setup(){	
+
+    ofSetFrameRate(60);
+    ofBackground(255, 255, 0);
     
     bool enableAttitude = true; // roll,pitch,yaw
     bool enableAccelerometer = true;
     bool enableGyro = true;
-    bool enableMagnetometer = true ;
+    bool enableMagnetometer = true;
     coreMotion.setup(enableAttitude,enableAccelerometer,enableGyro,enableMagnetometer);
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void ofApp::update(){
 
     coreMotion.update();
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
-	
-    ofBackground(255, 255, 0);
+void ofApp::draw(){
+
     
     // attitude- quaternion
     ofDrawBitmapStringHighlight("Attitude: (quaternion x,y,z,w)", 20, 25);
@@ -59,7 +54,7 @@ void testApp::draw(){
     ofDrawBitmapString(ofToString(g.x,3), 20, 200 );
     ofDrawBitmapString(ofToString(g.y,3), 120, 200 );
     ofDrawBitmapString(ofToString(g.z,3), 220, 200 );
-
+    
     // magnetometer
     ofVec3f m = coreMotion.getMagnetometerData();
     ofDrawBitmapStringHighlight("Magnetometer: (x,y,z)", 20, 225);
@@ -69,85 +64,84 @@ void testApp::draw(){
     ofDrawBitmapString(ofToString(m.z,3), 220, 250);
     
     
-    ofNoFill();
-        
-    glPushMatrix();
-    glTranslatef(ofGetWidth()/2, ofGetHeight()/2, 0);
+    
+    
+    ofPushMatrix();
+    ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
     
     // 1) quaternion rotations
     float angle;
-    ofVec3f axis;//(0,0,1.0f);    
+    ofVec3f axis;//(0,0,1.0f);
     quat.getRotate(angle, axis);
-    glRotatef(angle, axis.x, -axis.y, axis.z); // rotate with quaternion
+    ofRotate(angle, axis.x, -axis.y, axis.z); // rotate with quaternion
     
     // 2) rotate by multiplying matrix directly
     //ofMatrix4x4 mat = coreMotion.getRotationMatrix();
     //mat.rotate(180, 0, -1.0f, 0);
-    //glMultMatrixf(mat.getPtr()); 
+    //ofMultMatrix(mat); // OF 0.74: glMultMatrixf(mat.getPtr());
     
     // 3) rotate with eulers
-    //ofRotateX( ofRadToDeg( coreMotion.getPitch() ) ); 
+    //ofRotateX( ofRadToDeg( coreMotion.getPitch() ) );
     //ofRotateY( -ofRadToDeg( coreMotion.getRoll() ) );
     //ofRotateZ( ofRadToDeg( coreMotion.getYaw() ) );
     
-	ofBox(0, 0, 0, 220);
+    ofNoFill();
+	ofDrawBox(0, 0, 0, 220); // OF 0.74: ofBox(0, 0, 0, 220);
     ofDrawAxis(100);
-    glPopMatrix();
+    ofPopMatrix();
     
     ofFill();
     ofDrawBitmapString(ofToString("Double tap to reset \nAttitude reference frame"), 20, ofGetHeight() - 50);
-    
 }
 
 //--------------------------------------------------------------
-void testApp::exit(){
-
-}
-
-//--------------------------------------------------------------
-void testApp::touchDown(ofTouchEventArgs & touch){
+void ofApp::exit(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::touchMoved(ofTouchEventArgs & touch){
+void ofApp::touchDown(ofTouchEventArgs & touch){
 
 }
 
 //--------------------------------------------------------------
-void testApp::touchUp(ofTouchEventArgs & touch){
+void ofApp::touchMoved(ofTouchEventArgs & touch){
 
 }
 
 //--------------------------------------------------------------
-void testApp::touchDoubleTap(ofTouchEventArgs & touch){
+void ofApp::touchUp(ofTouchEventArgs & touch){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::touchDoubleTap(ofTouchEventArgs & touch){
 
     // resets attitude to current
     coreMotion.resetAttitude();
 }
 
 //--------------------------------------------------------------
-void testApp::touchCancelled(ofTouchEventArgs & touch){
+void ofApp::touchCancelled(ofTouchEventArgs & touch){
     
 }
 
 //--------------------------------------------------------------
-void testApp::lostFocus(){
+void ofApp::lostFocus(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotFocus(){
+void ofApp::gotFocus(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotMemoryWarning(){
+void ofApp::gotMemoryWarning(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::deviceOrientationChanged(int newOrientation){
+void ofApp::deviceOrientationChanged(int newOrientation){
 
 }
-

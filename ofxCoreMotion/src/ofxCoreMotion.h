@@ -31,17 +31,10 @@ public:
     void setupAccelerometer();
     void setupMagnetometer();
     void setupAttitude();
-    bool enableAttitude, enableGyro, enableAccelerometer, enableMagnetometer;
+    void setUpdateFrequency(float updateFrequency);    
+    void resetAttitude();    
     
-    // ios delegate
-    //ofxCoreMotionDelegate* coreMotionDelegate; 
-    CMMotionManager* motionManager;
-    float updateFrequency;
-	CMAttitude* referenceAttitude;
-    void resetAttitude();
-    
-    void update();
-    
+    void update();    
     
     ofVec3f getAccelerometerData();
     ofVec3f getGyroscopeData();
@@ -54,6 +47,13 @@ public:
     //GLfloat* getRotationMatrix();
     
 protected:
+    
+    // core motion
+    CMMotionManager* motionManager;
+	CMAttitude* referenceAttitude;
+    
+    float updateFrequency;
+    bool enableAttitude, enableGyro, enableAccelerometer, enableMagnetometer;
 
     ofVec3f accelerometerData;
     ofVec3f gyroscopeData;

@@ -4,11 +4,9 @@
 
 ofxCoreMotion::ofxCoreMotion() {
     
-    // setup objc style delegate
-    //coreMotionDelegate = [[ofxCoreMotionDelegate alloc] init:this ];
     motionManager = [[CMMotionManager alloc] init];
     referenceAttitude = nil;
-    updateFrequency = 1.0f/60.0f;
+    updateFrequency = 1.0f/ofGetFrameRate();
     roll = pitch = yaw = 0;
     enableAttitude = false;
     enableGyro = false;
@@ -18,7 +16,6 @@ ofxCoreMotion::ofxCoreMotion() {
 
 
 ofxCoreMotion::~ofxCoreMotion() {
-    //[coreMotionDelegate release];
     
     [referenceAttitude release];
     referenceAttitude = nil;
@@ -47,7 +44,6 @@ void ofxCoreMotion::resetAttitude() {
 void ofxCoreMotion::setupAttitude() {
     
     enableAttitude = true;
-    //[coreMotionDelegate setupDeviceMotion];
     
     // by default let's not use a reference frame so orients to default
     /*CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
@@ -63,7 +59,6 @@ void ofxCoreMotion::setupAttitude() {
 void ofxCoreMotion::setupAccelerometer() {
     
     enableAccelerometer = true;
-    //[coreMotionDelegate setupAccelerometer];
     [motionManager setAccelerometerUpdateInterval:updateFrequency];
     [motionManager startAccelerometerUpdates];
 }
@@ -71,7 +66,6 @@ void ofxCoreMotion::setupAccelerometer() {
 void ofxCoreMotion::setupGyroscope() {
     
     enableGyro = true;
-    //[coreMotionDelegate setupGyroscope];
     [motionManager setGyroUpdateInterval:updateFrequency];
     [motionManager startGyroUpdates];
 }
@@ -80,10 +74,20 @@ void ofxCoreMotion::setupGyroscope() {
 void ofxCoreMotion::setupMagnetometer() {
     
     enableMagnetometer = true;
-    //[coreMotionDelegate setupMagnetometer];
     [motionManager setMagnetometerUpdateInterval:updateFrequency];
     [motionManager startMagnetometerUpdates];
 }
+
+void ofxCoreMotion::setUpdateFrequency(float updateFrequency) {
+    
+    // default = 1.0f/ofGetFrameRate();
+    this->updateFrequency = updateFrequency;
+    if(enableAttitude) [motionManager setDeviceMotionUpdateInterval: updateFrequency];
+    if(enableAccelerometer) [motionManager setAccelerometerUpdateInterval:updateFrequency];
+    if(enableGyro) [motionManager setGyroUpdateInterval:updateFrequency];
+    if(enableMagnetometer) [motionManager setMagnetometerUpdateInterval:updateFrequency];
+}
+
 
 // convenience method to update all objc properties to OF friendly at once
 void ofxCoreMotion::update() {
@@ -116,9 +120,6 @@ void ofxCoreMotion::update() {
         rotMatrix[4] = rot.m12; rotMatrix[5] = rot.m22; rotMatrix[6] = rot.m32;  rotMatrix[7] = 0;
         rotMatrix[8] = rot.m13; rotMatrix[9] = rot.m23; rotMatrix[10] = rot.m33; rotMatrix[11] = 0;
         rotMatrix[12] = 0;      rotMatrix[13] = 0;      rotMatrix[14] = 0;       rotMatrix[15] = 1;*/
-        
-        //cout << rot.m13 << ", " << rot.m23 << ", " << rot.m33 << endl;
-        //cout << quat.x << ", " << quat.x3 << ", " << rot.m33 << endl;
     }
     
     if(enableAccelerometer) {
