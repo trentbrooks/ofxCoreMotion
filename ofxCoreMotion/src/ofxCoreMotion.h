@@ -25,17 +25,15 @@ public:
     
     ofxCoreMotion();
     virtual ~ofxCoreMotion();
-    
-    // set the reference frame 
-    void setReferenceFrameType(CMAttitudeReferenceFrame type); //1,2,4,8 (default: CMAttitudeReferenceFrameXArbitraryZVertical)
-    
+
     void setup(bool enableAttitude = true, bool enableAccelerometer = false, bool enableGyro = false, bool enableMagnetometer = false);
+    
     void setupGyroscope();
     void setupAccelerometer();
     void setupMagnetometer();
     void setupAttitude(CMAttitudeReferenceFrame type = CMAttitudeReferenceFrameXArbitraryZVertical);
     
-    void resetAttitude();
+    void resetAttitude(bool toCurrentReferenceFrame = true);
     
     void setUpdateFrequency(float updateFrequency);    
     void update();    

@@ -81,17 +81,20 @@ void ofxCoreMotion::setUpdateFrequency(float updateFrequency) {
     if(enableMagnetometer) [motionManager setMagnetometerUpdateInterval:updateFrequency];
 }
 
-// CMAttitudeReferenceFrame: 1,2,4,8
-void ofxCoreMotion::setReferenceFrameType(CMAttitudeReferenceFrame type) {
-    referenceFrameType = type;
-}
 
-// resets reference attitude to current
-void ofxCoreMotion::resetAttitude() {
+// resets reference attitude to current or null's the ref frame
+void ofxCoreMotion::resetAttitude(bool toCurrentReferenceFrame) {
     
-    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
-	CMAttitude *attitude = deviceMotion.attitude;
-    referenceAttitude = [attitude retain];
+    if(toCurrentReferenceFrame) {
+        CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+        CMAttitude *attitude = deviceMotion.attitude;
+        referenceAttitude = [attitude retain];
+    } else {
+        if(referenceAttitude != nil) {
+            [referenceAttitude release];
+            referenceAttitude = nil;
+        }
+    }
 }
 
 
