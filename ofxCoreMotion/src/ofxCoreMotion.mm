@@ -6,7 +6,8 @@ ofxCoreMotion::ofxCoreMotion() {
     
     motionManager = [[CMMotionManager alloc] init];
     referenceAttitude = nil;
-    updateFrequency = 1.0f/ofGetFrameRate();
+    referenceFrameType = [motionManager attitudeReferenceFrame]; // default = 1,CMAttitudeReferenceFrameXArbitraryZVertical
+    updateFrequency = 1.0f/60.0f;
     roll = pitch = yaw = 0;
     enableAttitude = false;
     enableGyro = false;
@@ -35,25 +36,17 @@ void ofxCoreMotion::setup(bool enableAttitude, bool enableAccelerometer, bool en
     if(enableMagnetometer) setupMagnetometer();
 }
 
-void ofxCoreMotion::resetAttitude() {
-    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
-	CMAttitude *attitude = deviceMotion.attitude;
-    referenceAttitude = [attitude retain];
-}
-
-void ofxCoreMotion::setupAttitude() {
+void ofxCoreMotion::setupAttitude(CMAttitudeReferenceFrame type) {
     
     enableAttitude = true;
-    
-    // by default let's not use a reference frame so orients to default
-    /*CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
-	CMAttitude *attitude = deviceMotion.attitude;
-    referenceAttitude = [attitude retain];*/
+    referenceFrameType = type;
     
     [motionManager setDeviceMotionUpdateInterval: updateFrequency];
-    [motionManager startDeviceMotionUpdates];
-    //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
-
+    
+    // default is CMAttitudeReferenceFrameXArbitraryZVertical
+    // [motionManager startDeviceMotionUpdates];
+    [motionManager startDeviceMotionUpdatesUsingReferenceFrame:referenceFrameType];
+    
 }
 
 void ofxCoreMotion::setupAccelerometer() {
@@ -88,11 +81,39 @@ void ofxCoreMotion::setUpdateFrequency(float updateFrequency) {
     if(enableMagnetometer) [motionManager setMagnetometerUpdateInterval:updateFrequency];
 }
 
+// CMAttitudeReferenceFrame: 1,2,4,8
+void ofxCoreMotion::setReferenceFrameType(CMAttitudeReferenceFrame type) {
+    referenceFrameType = type;
+}
+
+// resets reference attitude to current
+void ofxCoreMotion::resetAttitude() {
+    
+    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+	CMAttitude *attitude = deviceMotion.attitude;
+    referenceAttitude = [attitude retain];
+}
+
 
 // convenience method to update all objc properties to OF friendly at once
 void ofxCoreMotion::update() {
     
     CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+    
+    // gravity
+    gravity.x = deviceMotion.gravity.x;
+    gravity.y = deviceMotion.gravity.y;
+    gravity.z = deviceMotion.gravity.z;
+    
+    // user acceleration
+    userAcceleration.x = deviceMotion.userAcceleration.x;
+    userAcceleration.y = deviceMotion.userAcceleration.y;
+    userAcceleration.z = deviceMotion.userAcceleration.z;
+    
+    // magnetic field
+    magneticField.x = deviceMotion.magneticField.field.x;
+    magneticField.y = deviceMotion.magneticField.field.y;
+    magneticField.z = deviceMotion.magneticField.field.z;
     
     if(enableAttitude) {
               
@@ -101,10 +122,12 @@ void ofxCoreMotion::update() {
             [attitude multiplyByInverseOfAttitude:referenceAttitude];
         }
         
+                
         // attitude euler angles
         roll = attitude.roll;
         pitch = attitude.pitch;
         yaw	= attitude.yaw;
+        
         
         // attitude quaternion
         CMQuaternion quat = attitude.quaternion;
@@ -176,3 +199,14 @@ ofMatrix4x4 ofxCoreMotion::getRotationMatrix() {
     return rotMatrix;
 }
 
+ofVec3f ofxCoreMotion::getGravity() {
+    return gravity;
+}
+
+ofVec3f ofxCoreMotion::getUserAcceleration() {
+    return userAcceleration;
+}
+
+ofVec3f ofxCoreMotion::getMagneticField() {
+    return magneticField;
+}

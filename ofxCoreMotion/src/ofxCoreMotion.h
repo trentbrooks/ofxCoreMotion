@@ -26,14 +26,18 @@ public:
     ofxCoreMotion();
     virtual ~ofxCoreMotion();
     
+    // set the reference frame 
+    void setReferenceFrameType(CMAttitudeReferenceFrame type); //1,2,4,8 (default: CMAttitudeReferenceFrameXArbitraryZVertical)
+    
     void setup(bool enableAttitude = true, bool enableAccelerometer = false, bool enableGyro = false, bool enableMagnetometer = false);
     void setupGyroscope();
     void setupAccelerometer();
     void setupMagnetometer();
-    void setupAttitude();
-    void setUpdateFrequency(float updateFrequency);    
-    void resetAttitude();    
+    void setupAttitude(CMAttitudeReferenceFrame type = CMAttitudeReferenceFrameXArbitraryZVertical);
     
+    void resetAttitude();
+    
+    void setUpdateFrequency(float updateFrequency);    
     void update();    
     
     ofVec3f getAccelerometerData();
@@ -45,12 +49,16 @@ public:
     ofQuaternion getQuaternion();
     ofMatrix4x4 getRotationMatrix();
     //GLfloat* getRotationMatrix();
+    ofVec3f getGravity();
+    ofVec3f getUserAcceleration();
+    ofVec3f getMagneticField();
     
 protected:
     
     // core motion
     CMMotionManager* motionManager;
 	CMAttitude* referenceAttitude;
+    CMAttitudeReferenceFrame referenceFrameType; // 1,2,4,8
     
     float updateFrequency;
     bool enableAttitude, enableGyro, enableAccelerometer, enableMagnetometer;
@@ -62,6 +70,9 @@ protected:
     ofQuaternion attitudeQuat;
     ofMatrix4x4 rotMatrix;
     //GLfloat	rotMatrix[16];
+    ofVec3f gravity;
+    ofVec3f userAcceleration;
+    ofVec3f magneticField;
 
 };
 

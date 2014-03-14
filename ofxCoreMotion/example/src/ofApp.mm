@@ -6,11 +6,11 @@ void ofApp::setup(){
     ofSetFrameRate(60);
     ofBackground(255, 255, 0);
     
-    bool enableAttitude = true; // roll,pitch,yaw
-    bool enableAccelerometer = true;
-    bool enableGyro = true;
-    bool enableMagnetometer = true;
-    coreMotion.setup(enableAttitude,enableAccelerometer,enableGyro,enableMagnetometer);
+
+    coreMotion.setupMagnetometer();
+    coreMotion.setupGyroscope();
+    coreMotion.setupAccelerometer();
+    coreMotion.setupAttitude(CMAttitudeReferenceFrameXMagneticNorthZVertical);
 }
 
 //--------------------------------------------------------------
