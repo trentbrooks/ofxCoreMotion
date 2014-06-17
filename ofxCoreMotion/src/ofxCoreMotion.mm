@@ -49,11 +49,31 @@ void ofxCoreMotion::setupAttitude(CMAttitudeReferenceFrame type) {
     
 }
 
+void ofxCoreMotion::disableAttitude() {
+    
+    [motionManager stopDeviceMotionUpdates];
+    enableAttitude = false;
+    roll = pitch = yaw = 0;
+    attitudeQuat.set(0, 0, 0, 1);
+    rotMatrix.makeIdentityMatrix();
+    gravity.set(0,0,0);
+    userAcceleration.set(0, 0, 0);
+    magneticField.set(0, 0, 0);
+    
+}
+
 void ofxCoreMotion::setupAccelerometer() {
     
     enableAccelerometer = true;
     [motionManager setAccelerometerUpdateInterval:updateFrequency];
     [motionManager startAccelerometerUpdates];
+}
+
+void ofxCoreMotion::disableAccelerometer() {
+    
+    [motionManager stopAccelerometerUpdates];
+    enableAccelerometer = false;
+    accelerometerData.set(0, 0, 0);
 }
 
 void ofxCoreMotion::setupGyroscope() {
@@ -63,12 +83,25 @@ void ofxCoreMotion::setupGyroscope() {
     [motionManager startGyroUpdates];
 }
 
+void ofxCoreMotion::disableGyroscope() {
+    
+    [motionManager stopGyroUpdates];
+    enableGyro = false;
+    gyroscopeData.set(0, 0, 0);
+}
 
 void ofxCoreMotion::setupMagnetometer() {
     
     enableMagnetometer = true;
     [motionManager setMagnetometerUpdateInterval:updateFrequency];
     [motionManager startMagnetometerUpdates];
+}
+
+void ofxCoreMotion::disableMagnetometer() {
+    
+    [motionManager stopMagnetometerUpdates];
+    enableMagnetometer = false;
+    magnetometerData.set(0, 0, 0);
 }
 
 void ofxCoreMotion::setUpdateFrequency(float updateFrequency) {
@@ -103,23 +136,24 @@ void ofxCoreMotion::update() {
     
     CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
     
-    // gravity
-    gravity.x = deviceMotion.gravity.x;
-    gravity.y = deviceMotion.gravity.y;
-    gravity.z = deviceMotion.gravity.z;
-    
-    // user acceleration
-    userAcceleration.x = deviceMotion.userAcceleration.x;
-    userAcceleration.y = deviceMotion.userAcceleration.y;
-    userAcceleration.z = deviceMotion.userAcceleration.z;
-    
-    // magnetic field
-    magneticField.x = deviceMotion.magneticField.field.x;
-    magneticField.y = deviceMotion.magneticField.field.y;
-    magneticField.z = deviceMotion.magneticField.field.z;
     
     if(enableAttitude) {
-              
+    
+        // gravity
+        gravity.x = deviceMotion.gravity.x;
+        gravity.y = deviceMotion.gravity.y;
+        gravity.z = deviceMotion.gravity.z;
+        
+        // user acceleration
+        userAcceleration.x = deviceMotion.userAcceleration.x;
+        userAcceleration.y = deviceMotion.userAcceleration.y;
+        userAcceleration.z = deviceMotion.userAcceleration.z;
+        
+        // magnetic field
+        magneticField.x = deviceMotion.magneticField.field.x;
+        magneticField.y = deviceMotion.magneticField.field.y;
+        magneticField.z = deviceMotion.magneticField.field.z;
+        
         CMAttitude *attitude = deviceMotion.attitude;
         if (referenceAttitude != nil ) {
             [attitude multiplyByInverseOfAttitude:referenceAttitude];

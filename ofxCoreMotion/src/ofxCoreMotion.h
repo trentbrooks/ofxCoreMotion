@@ -33,6 +33,11 @@ public:
     void setupMagnetometer();
     void setupAttitude(CMAttitudeReferenceFrame type = CMAttitudeReferenceFrameXArbitraryZVertical);
     
+    void disableGyroscope();
+    void disableAccelerometer();
+    void disableMagnetometer();
+    void disableAttitude();
+    
     void resetAttitude(bool toCurrentReferenceFrame = true);
     
     void setUpdateFrequency(float updateFrequency);    
